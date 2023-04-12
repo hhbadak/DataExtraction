@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace DataExtraction
     public partial class LoginScreen : Form
     {
         bool thereEntry = false;
+        DataModel dm = new DataModel();
         public LoginScreen()
         {
             InitializeComponent();
@@ -27,8 +29,10 @@ namespace DataExtraction
         {
             if (!string.IsNullOrEmpty(tb_username.Text) && !string.IsNullOrEmpty(tb_password.Text))
             {
-                if (tb_username.Text == "HHBadak" && tb_password.Text == "15963")
+                Employee model = dm.employeeLogin(tb_username.Text, tb_password.Text);
+                if (model.userName != null)
                 {
+                    Helpers.GirisYapanKullanici = model;
                     thereEntry = true;
                     this.Close();
                 }

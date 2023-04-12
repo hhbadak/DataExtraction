@@ -52,6 +52,7 @@
     <Compile Include="CategoryOperations.Designer.cs">
       <DependentUpon>CategoryOperations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="HomePage.cs">
       <SubType>Form</SubType>
     </Compile>
