@@ -9,6 +9,6 @@ namespace DataExtraction
 {
     public class Helpers
     {
-        public static Employee GirisYapanKullanici;
+        public static Employee loggedInUser;
     }
 }

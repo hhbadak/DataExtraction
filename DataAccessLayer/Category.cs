@@ -12,5 +12,6 @@ namespace DataAccessLayer
         public string categoryName { get; set; }
         public string description { get; set; }
         public byte[] picture { get; set; }
+        public string picturePath { get; set; }
     }
 }

@@ -18,12 +18,13 @@ namespace DataAccessLayer
             cmd = con.CreateCommand();
         }
 
+        #region Category Operations
         public List<Category> categoryList()
         {
             List<Category> categoryList = new List<Category>();
             try
             {
-                cmd.CommandText = "SELECT CategoryID, CategoryName, Description, Picture FROM Categories";
+                cmd.CommandText = "SELECT CategoryID, CategoryName, Description, PicturePath FROM Categories";
                 cmd.Parameters.Clear();
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -33,7 +34,7 @@ namespace DataAccessLayer
                     c.ID = reader.GetInt32(0);
                     c.categoryName = reader.GetString(1);
                     c.description = reader.GetString(2);
-                    c.picture = (byte[])reader["Picture"];
+                    c.picturePath = !reader.IsDBNull(3) ? reader.GetString(3) : "none.png";
                     categoryList.Add(c);
                 }
                 return categoryList;
@@ -44,6 +45,89 @@ namespace DataAccessLayer
             }
             finally { con.Close(); }
         }
+        public Category getCategory(int id)
+        {
+            try
+            {
+                cmd.CommandText = "SELECT CategoryID, CategoryName, Description FROM Categories WHERE CategoryID=@id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                Category c = new Category();
+                while (reader.Read())
+                {
+                    c.ID = reader.GetInt32(0);
+                    c.categoryName = reader.GetString(1);
+                    c.description = !reader.IsDBNull(2) ? reader.GetString(2) : "Açıklama Yok";
+                }
+                return c;
+            }
+            catch
+            {
+                return null;
+            }
+            finally { con.Close(); }
+        }
+        public Category categoryAdd(Category model)
+        {
+            try
+            {
+                cmd.CommandText = "INSERT INTO Categories(CategoryName,Description,PicturePath) VALUES(@cName,@description,@picture) SELECT @@IDENTITY";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@cName", model.categoryName);
+                cmd.Parameters.AddWithValue("@description", model.description);
+                cmd.Parameters.AddWithValue("@picture", model.picturePath);
+                con.Open();
+                model.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                return model;
+            }
+            catch
+            {
+                return null;
+            }
+            finally { con.Close(); }
+        }
+        public bool updateCategories(Category c)
+        {
+            try
+            {
+                cmd.CommandText = "UPDATE Categories SET CategoryName = @cName, Description = @description, PicturePath = @picture  WHERE CategoryID = @id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@cName", c.categoryName);
+                cmd.Parameters.AddWithValue("@description", c.description);
+                cmd.Parameters.AddWithValue("@id", c.ID);
+                cmd.Parameters.AddWithValue("@picture", c.picturePath);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally { con.Close(); }
+        }
+        public bool removeCategory(int id)
+        {
+            try
+            {
+                cmd.CommandText = "DELETE Categories WHERE CategoryID=@id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("id", id);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally { con.Close(); }
+        }
+        #endregion
+
+        #region Product Operations
         public List<Products> productList()
         {
             List<Products> productList = new List<Products>();
@@ -94,6 +178,9 @@ namespace DataAccessLayer
             }
             finally { con.Close(); }
         }
+        #endregion
+
+        #region Employee Operations
         public Employee employeeLogin(string userName, string password)
         {
             Employee model = new Employee();
@@ -161,5 +248,7 @@ namespace DataAccessLayer
             }
             finally { con.Close(); }
         }
+        #endregion
+
     }
 }

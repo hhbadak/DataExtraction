@@ -32,7 +32,7 @@ namespace DataExtraction
                 Employee model = dm.employeeLogin(tb_username.Text, tb_password.Text);
                 if (model.userName != null)
                 {
-                    Helpers.GirisYapanKullanici = model;
+                    Helpers.loggedInUser = model;
                     thereEntry = true;
                     this.Close();
                 }
