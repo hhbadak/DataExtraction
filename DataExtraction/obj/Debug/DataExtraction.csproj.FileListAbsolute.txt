@@ -26,7 +26,6 @@ C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.CategoryOperations.resources
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.HomePage.resources
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.LoginScreen.resources
-C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.ProductAdd.resources
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.ProductsShow.resources
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.Properties.Resources.resources
 C:\Users\HsnHs\OneDrive\Belgeler\GitHub\DataExtraction\DataExtraction\obj\Debug\DataExtraction.csproj.GenerateResource.cache

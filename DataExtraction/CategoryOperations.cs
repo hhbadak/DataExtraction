@@ -26,6 +26,8 @@ namespace DataExtraction
         private void CategoryOperations_Load(object sender, EventArgs e)
         {
             dataGridView1.DataSource = dm.categoryList();
+            btn_update.Visible = false;
+
         }
 
         private void btn_save_Click(object sender, EventArgs e)
@@ -35,6 +37,17 @@ namespace DataExtraction
                 Category model = new Category();
                 model.categoryName = tb_categoryName.Text;
                 model.description = tb_description.Text;
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    FileInfo fi = new FileInfo(openFileDialog1.FileName);
+                    if (fi.Extension == ".jpg" || fi.Extension == ".jpeg" || fi.Extension == ".png")
+                    {
+                        string extension = fi.Extension;
+                        string name = Guid.NewGuid().ToString();
+                        model.picture = name + extension;
+                        imagePath = $"../Image/CategoryImage/{name}{extension}";
+                    }
+                }
                 model = dm.categoryAdd(model);
                 if (model.ID != 0)
                 {
@@ -87,8 +100,8 @@ namespace DataExtraction
                 {
                     string extension = fi.Extension;
                     string name = Guid.NewGuid().ToString();
-                    c.picturePath = name + extension;
-                    imagePath = $"~/Image/CategoryImage/{name}{extension}";
+                    c.picture = name + extension;
+                    imagePath = $"../Image/CategoryImage/{name}{extension}";
                 }
             }
             dm.updateCategories(c);

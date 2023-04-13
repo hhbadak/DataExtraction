@@ -65,12 +65,6 @@
     <Compile Include="LoginScreen.Designer.cs">
       <DependentUpon>LoginScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProductAdd.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProductAdd.Designer.cs">
-      <DependentUpon>ProductAdd.cs</DependentUpon>
-    </Compile>
     <Compile Include="ProductsShow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,9 +81,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoginScreen.resx">
       <DependentUpon>LoginScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProductAdd.resx">
-      <DependentUpon>ProductAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProductsShow.resx">
       <DependentUpon>ProductsShow.cs</DependentUpon>

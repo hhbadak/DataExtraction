@@ -24,7 +24,7 @@ namespace DataAccessLayer
             List<Category> categoryList = new List<Category>();
             try
             {
-                cmd.CommandText = "SELECT CategoryID, CategoryName, Description, PicturePath FROM Categories";
+                cmd.CommandText = "SELECT CategoryID, CategoryName, Description, Picture FROM Categories";
                 cmd.Parameters.Clear();
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -34,7 +34,7 @@ namespace DataAccessLayer
                     c.ID = reader.GetInt32(0);
                     c.categoryName = reader.GetString(1);
                     c.description = reader.GetString(2);
-                    c.picturePath = !reader.IsDBNull(3) ? reader.GetString(3) : "none.png";
+                    c.picture = !reader.IsDBNull(3) ? reader.GetString(3) : "none.png";
                     categoryList.Add(c);
                 }
                 return categoryList;
@@ -73,11 +73,11 @@ namespace DataAccessLayer
         {
             try
             {
-                cmd.CommandText = "INSERT INTO Categories(CategoryName,Description,PicturePath) VALUES(@cName,@description,@picture) SELECT @@IDENTITY";
+                cmd.CommandText = "INSERT INTO Categories(CategoryName,Description,Picture) VALUES(@cName,@description,@picture) SELECT @@IDENTITY";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@cName", model.categoryName);
                 cmd.Parameters.AddWithValue("@description", model.description);
-                cmd.Parameters.AddWithValue("@picture", model.picturePath);
+                cmd.Parameters.AddWithValue("@picture", model.picture);
                 con.Open();
                 model.ID = Convert.ToInt32(cmd.ExecuteScalar());
                 return model;
@@ -92,12 +92,12 @@ namespace DataAccessLayer
         {
             try
             {
-                cmd.CommandText = "UPDATE Categories SET CategoryName = @cName, Description = @description, PicturePath = @picture  WHERE CategoryID = @id";
+                cmd.CommandText = "UPDATE Categories SET CategoryName = @cName, Description = @description, Picture = @picture  WHERE CategoryID = @id";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@cName", c.categoryName);
                 cmd.Parameters.AddWithValue("@description", c.description);
                 cmd.Parameters.AddWithValue("@id", c.ID);
-                cmd.Parameters.AddWithValue("@picture", c.picturePath);
+                cmd.Parameters.AddWithValue("@picture", c.picture);
                 con.Open();
                 cmd.ExecuteNonQuery();
                 return true;
@@ -127,31 +127,33 @@ namespace DataAccessLayer
         }
         #endregion
 
-        #region Product Operations
-        public List<Products> productList()
+        #region Customers Operations
+        public List<Customers> customerList()
         {
-            List<Products> productList = new List<Products>();
+            List<Customers> cstmrs = new List<Customers>();
             try
             {
-                cmd.CommandText = "SELECT p.ProductID, p.ProductName, s.CompanyName, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel  FROM Products AS p\r\nJOIN Categories AS c ON c.CategoryID = p.CategoryID\r\nJOIN Suppliers AS s ON s.SupplierID = p.SupplierID\r\nWHERE Discontinued = 1";
+                cmd.CommandText = "SELECT [CustomerID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax] FROM Customers";
                 cmd.Parameters.Clear();
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
+                Customers c = new Customers();
                 while (reader.Read())
                 {
-                    Products p = new Products();
-                    p.ID = reader.GetInt32(0);
-                    p.productName = reader.GetString(1);
-                    p.supplierName = reader.GetString(2);
-                    p.categoryName = reader.GetString(3);
-                    p.quantityPerUnit = reader.GetString(4);
-                    p.unitPrice = reader.GetDecimal(5);
-                    p.unitInStock = reader.GetInt16(6);
-                    p.unitsOnOrder = reader.GetInt16(7);
-                    p.reorderLevel = reader.GetInt16(8);
-                    productList.Add(p);
+                    c.ID = reader.GetString(0);
+                    c.companyName = reader.GetString(1);
+                    c.contactName = reader.GetString(2);
+                    c.contactTitle = reader.GetString(3);
+                    c.address = reader.GetString(4);
+                    c.city = reader.GetString(5);
+                    c.region = reader.GetString(6);
+                    c.postalCode = reader.GetString(7);
+                    c.country = reader.GetString(8);
+                    c.phone = reader.GetString(9);
+                    c.fax = reader.GetString(10);
+                    cstmrs.Add(c);
                 }
-                return productList;
+                return cstmrs;
             }
             catch
             {
@@ -159,22 +161,100 @@ namespace DataAccessLayer
             }
             finally { con.Close(); }
         }
-        public void productAdd(Products p)
+        public Customers getCustomers(string id)
         {
             try
             {
-                cmd.CommandText = "INSERT INTO Products(ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) VALUES (@pName, @sID, @cID, @qpUnit, @uPrice, @uiStock, @uoOrder, @rLevel, 1)";
+                cmd.CommandText = "SELECT [CustomerID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax] FROM Customers WHERE CustomerID = @id";
                 cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@pName", p.productName);
-                cmd.Parameters.AddWithValue("@sID", p.supplierID);
-                cmd.Parameters.AddWithValue("@cID", p.categoryID);
-                cmd.Parameters.AddWithValue("@qpUnit", p.quantityPerUnit);
-                cmd.Parameters.AddWithValue("@uPrice", p.unitPrice);
-                cmd.Parameters.AddWithValue("@uiStock", p.unitInStock);
-                cmd.Parameters.AddWithValue("@uoOrder", p.unitsOnOrder);
-                cmd.Parameters.AddWithValue("@rLevel", p.reorderLevel);
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                Customers c = new Customers();
+                while (reader.Read())
+                {
+                    c.ID = reader.GetString(0);
+                    c.companyName = reader.GetString(1);
+                    c.contactName = reader.GetString(2);
+                    c.contactTitle = reader.GetString(3);
+                    c.address = reader.GetString(4);
+                    c.city = reader.GetString(5);
+                    c.region = reader.GetString(6);
+                    c.postalCode = reader.GetString(7);
+                    c.country = reader.GetString(8);
+                    c.phone = reader.GetString(9);
+                    c.fax = reader.GetString(10);
+                }
+                return c;
+            }
+            catch
+            {
+                return null;
+            }
+            finally { con.Close(); }
+        }
+        public void customerAdd(Customers model)
+        {
+            try
+            {
+                cmd.CommandText = "INSERT INTO Customers([CustomerID],[CompanyName],[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax]) VALUES(@ID, @companyName, @contactName, @contactTitle, @address, @city, @region, @postalCode, @country, @phone, @fax) SELECT @@IDENTITY";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@ID", model.ID);
+                cmd.Parameters.AddWithValue("@companyName", model.companyName);
+                cmd.Parameters.AddWithValue("@contactName", model.contactName);
+                cmd.Parameters.AddWithValue("@contactTitle", model.contactTitle);
+                cmd.Parameters.AddWithValue("@address", model.address);
+                cmd.Parameters.AddWithValue("@city", model.city);
+                cmd.Parameters.AddWithValue("@region", model.region);
+                cmd.Parameters.AddWithValue("@postalCode", model.postalCode);
+                cmd.Parameters.AddWithValue("@country", model.country);
+                cmd.Parameters.AddWithValue("@phone", model.phone);
+                cmd.Parameters.AddWithValue("@fax", model.fax);
+                cmd.ExecuteNonQuery();
+            }
+            finally { con.Close(); }
+        }
+        public bool updateCustomer(Customers model)
+        {
+            try
+            {
+                cmd.CommandText="UPDATE Customers SET CompanyName = @companyName, ContactName = @contactName, ContactTitle = @contactTitle, Address = @address, City = @city, Region = @region, PostalCode = @postalCode, Country = @country, Phone = @phone, Fax = @fax";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@ID", model.ID);
+                cmd.Parameters.AddWithValue("@companyName", model.companyName);
+                cmd.Parameters.AddWithValue("@contactName", model.contactName);
+                cmd.Parameters.AddWithValue("@contactTitle", model.contactTitle);
+                cmd.Parameters.AddWithValue("@address", model.address);
+                cmd.Parameters.AddWithValue("@city", model.city);
+                cmd.Parameters.AddWithValue("@region", model.region);
+                cmd.Parameters.AddWithValue("@postalCode", model.postalCode);
+                cmd.Parameters.AddWithValue("@country", model.country);
+                cmd.Parameters.AddWithValue("@phone", model.phone);
+                cmd.Parameters.AddWithValue("@fax", model.fax);
                 con.Open();
                 cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally { con.Close(); }
+        }
+        public bool removeCustomer(string id)
+        {
+            try
+            {
+                cmd.CommandText = "DELETE Customers WHERE CustomerID = @id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                return true;
+             }
+            catch
+            {
+                return false;
             }
             finally { con.Close(); }
         }
@@ -249,6 +329,73 @@ namespace DataAccessLayer
             finally { con.Close(); }
         }
         #endregion
+
+        #region Orders Operations
+
+        #endregion
+
+        #region Product Operations
+        public List<Products> productList()
+        {
+            List<Products> productList = new List<Products>();
+            try
+            {
+                cmd.CommandText = "SELECT p.ProductID, p.ProductName, s.CompanyName, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel  FROM Products AS p\r\nJOIN Categories AS c ON c.CategoryID = p.CategoryID\r\nJOIN Suppliers AS s ON s.SupplierID = p.SupplierID\r\nWHERE Discontinued = 1";
+                cmd.Parameters.Clear();
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Products p = new Products();
+                    p.ID = reader.GetInt32(0);
+                    p.productName = reader.GetString(1);
+                    p.supplierName = reader.GetString(2);
+                    p.categoryName = reader.GetString(3);
+                    p.quantityPerUnit = reader.GetString(4);
+                    p.unitPrice = reader.GetDecimal(5);
+                    p.unitInStock = reader.GetInt16(6);
+                    p.unitsOnOrder = reader.GetInt16(7);
+                    p.reorderLevel = reader.GetInt16(8);
+                    productList.Add(p);
+                }
+                return productList;
+            }
+            catch
+            {
+                return null;
+            }
+            finally { con.Close(); }
+        }
+        public void productAdd(Products p)
+        {
+            try
+            {
+                cmd.CommandText = "INSERT INTO Products(ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) VALUES (@pName, @sID, @cID, @qpUnit, @uPrice, @uiStock, @uoOrder, @rLevel, 1)";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@pName", p.productName);
+                cmd.Parameters.AddWithValue("@sID", p.supplierID);
+                cmd.Parameters.AddWithValue("@cID", p.categoryID);
+                cmd.Parameters.AddWithValue("@qpUnit", p.quantityPerUnit);
+                cmd.Parameters.AddWithValue("@uPrice", p.unitPrice);
+                cmd.Parameters.AddWithValue("@uiStock", p.unitInStock);
+                cmd.Parameters.AddWithValue("@uoOrder", p.unitsOnOrder);
+                cmd.Parameters.AddWithValue("@rLevel", p.reorderLevel);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            finally { con.Close(); }
+        }
+        #endregion
+
+        #region Shippers Operations
+
+        #endregion
+
+        #region Suppliers Operations
+
+        #endregion
+
+
 
     }
 }

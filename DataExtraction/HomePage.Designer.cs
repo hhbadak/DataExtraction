@@ -34,12 +34,20 @@
             this.TSMI_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_transactions = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_categoryOperations = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_categoryAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TSMI_products = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_productAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.TSSL_userNameINFO = new System.Windows.Forms.ToolStripStatusLabel();
+            this.TSMI_customers = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_employees = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_orders = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_shippers = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_suppliers = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -75,10 +83,18 @@
             // 
             this.TSMI_transactions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TSMI_categoryOperations,
-            this.TSMI_categoryAdd,
             this.toolStripSeparator1,
             this.TSMI_products,
-            this.TSMI_productAdd});
+            this.toolStripSeparator2,
+            this.TSMI_customers,
+            this.toolStripSeparator3,
+            this.TSMI_employees,
+            this.toolStripSeparator4,
+            this.TSMI_orders,
+            this.toolStripSeparator5,
+            this.TSMI_shippers,
+            this.toolStripSeparator6,
+            this.TSMI_suppliers});
             this.TSMI_transactions.Name = "TSMI_transactions";
             this.TSMI_transactions.Size = new System.Drawing.Size(60, 20);
             this.TSMI_transactions.Text = "İşlemler";
@@ -87,37 +103,22 @@
             // 
             this.TSMI_categoryOperations.Image = ((System.Drawing.Image)(resources.GetObject("TSMI_categoryOperations.Image")));
             this.TSMI_categoryOperations.Name = "TSMI_categoryOperations";
-            this.TSMI_categoryOperations.Size = new System.Drawing.Size(142, 22);
+            this.TSMI_categoryOperations.Size = new System.Drawing.Size(180, 22);
             this.TSMI_categoryOperations.Text = "Kategoriler";
             this.TSMI_categoryOperations.Click += new System.EventHandler(this.TSMI_categoryOperations_Click);
-            // 
-            // TSMI_categoryAdd
-            // 
-            this.TSMI_categoryAdd.Image = ((System.Drawing.Image)(resources.GetObject("TSMI_categoryAdd.Image")));
-            this.TSMI_categoryAdd.Name = "TSMI_categoryAdd";
-            this.TSMI_categoryAdd.Size = new System.Drawing.Size(142, 22);
-            this.TSMI_categoryAdd.Text = "Kategori Ekle";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // TSMI_products
             // 
             this.TSMI_products.Image = ((System.Drawing.Image)(resources.GetObject("TSMI_products.Image")));
             this.TSMI_products.Name = "TSMI_products";
-            this.TSMI_products.Size = new System.Drawing.Size(142, 22);
+            this.TSMI_products.Size = new System.Drawing.Size(180, 22);
             this.TSMI_products.Text = "Ürünler";
             this.TSMI_products.Click += new System.EventHandler(this.TSMI_products_Click);
-            // 
-            // TSMI_productAdd
-            // 
-            this.TSMI_productAdd.Image = ((System.Drawing.Image)(resources.GetObject("TSMI_productAdd.Image")));
-            this.TSMI_productAdd.Name = "TSMI_productAdd";
-            this.TSMI_productAdd.Size = new System.Drawing.Size(142, 22);
-            this.TSMI_productAdd.Text = "Ürün Ekle";
-            this.TSMI_productAdd.Click += new System.EventHandler(this.TSMI_productAdd_Click);
             // 
             // statusStrip1
             // 
@@ -132,6 +133,61 @@
             // 
             this.TSSL_userNameINFO.Name = "TSSL_userNameINFO";
             this.TSSL_userNameINFO.Size = new System.Drawing.Size(0, 17);
+            // 
+            // TSMI_customers
+            // 
+            this.TSMI_customers.Name = "TSMI_customers";
+            this.TSMI_customers.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_customers.Text = "Müşteriler";
+            // 
+            // TSMI_employees
+            // 
+            this.TSMI_employees.Name = "TSMI_employees";
+            this.TSMI_employees.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_employees.Text = "Çalışanlar";
+            // 
+            // TSMI_orders
+            // 
+            this.TSMI_orders.Name = "TSMI_orders";
+            this.TSMI_orders.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_orders.Text = "Siparişler";
+            // 
+            // TSMI_shippers
+            // 
+            this.TSMI_shippers.Name = "TSMI_shippers";
+            this.TSMI_shippers.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_shippers.Text = "Nakliyeciler";
+            // 
+            // TSMI_suppliers
+            // 
+            this.TSMI_suppliers.Name = "TSMI_suppliers";
+            this.TSMI_suppliers.Size = new System.Drawing.Size(180, 22);
+            this.TSMI_suppliers.Text = "Tedarikçiler";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
             // 
             // HomePage
             // 
@@ -162,11 +218,19 @@
         private System.Windows.Forms.ToolStripMenuItem TSMI_exit;
         private System.Windows.Forms.ToolStripMenuItem TSMI_transactions;
         private System.Windows.Forms.ToolStripMenuItem TSMI_categoryOperations;
-        private System.Windows.Forms.ToolStripMenuItem TSMI_categoryAdd;
         private System.Windows.Forms.ToolStripMenuItem TSMI_products;
-        private System.Windows.Forms.ToolStripMenuItem TSMI_productAdd;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel TSSL_userNameINFO;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_customers;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_employees;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_orders;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_shippers;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_suppliers;
     }
 }

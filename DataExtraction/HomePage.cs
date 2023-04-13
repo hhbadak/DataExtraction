@@ -66,13 +66,6 @@ namespace DataExtraction
             }
         }
 
-        private void TSMI_productAdd_Click(object sender, EventArgs e)
-        {
-            ProductAdd frm = new ProductAdd();
-            frm.MdiParent = this;
-            frm.Show();
-        }
-
         private void TSMI_exit_Click(object sender, EventArgs e)
         {
             this.Close();

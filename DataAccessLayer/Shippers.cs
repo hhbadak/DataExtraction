@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    public class Category
+    public class Shippers
     {
         public int ID { get; set; }
-        public string categoryName { get; set; }
-        public string description { get; set; }
-        public string picture { get; set; }
+        public string companyName { get; set; }
+        public string phone { get; set; }
     }
 }
