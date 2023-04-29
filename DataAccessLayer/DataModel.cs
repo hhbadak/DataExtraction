@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -44,6 +45,31 @@ namespace DataAccessLayer
                 return null;
             }
             finally { con.Close(); }
+        }
+        public List<Category> GetCategories()
+        {
+            List<Category> categories = new List<Category>();
+            try
+            {
+                cmd.CommandText = "SELECT CategoryID,CategoryName,Description FROM Categories";
+                cmd.Parameters.Clear();
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Category c = new Category() { ID = reader.GetInt32(0), categoryName = reader.GetString(1), description = !reader.IsDBNull(2) ? reader.GetString(2) : "Açıklama Yok" };
+                    categories.Add(c);
+                }
+                return categories;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                con.Close();
+            }
         }
         public Category getCategory(int id)
         {
@@ -340,7 +366,7 @@ namespace DataAccessLayer
             List<Products> productList = new List<Products>();
             try
             {
-                cmd.CommandText = "SELECT p.ProductID, p.ProductName, s.CompanyName, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel  FROM Products AS p\r\nJOIN Categories AS c ON c.CategoryID = p.CategoryID\r\nJOIN Suppliers AS s ON s.SupplierID = p.SupplierID\r\nWHERE Discontinued = 1";
+                cmd.CommandText = "SELECT p.ProductID, p.ProductName, s.CompanyName, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel FROM Products AS p\r\nJOIN Categories AS c ON c.CategoryID = p.CategoryID\r\nJOIN Suppliers AS s ON s.SupplierID = p.SupplierID";
                 cmd.Parameters.Clear();
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -366,24 +392,69 @@ namespace DataAccessLayer
             }
             finally { con.Close(); }
         }
-        public void productAdd(Products p)
+        public bool productAdd(Products p)
         {
             try
             {
-                cmd.CommandText = "INSERT INTO Products(ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) VALUES (@pName, @sID, @cID, @qpUnit, @uPrice, @uiStock, @uoOrder, @rLevel, 1)";
+                cmd.CommandText = "INSERT INTO Products(ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued, Barcode, IsFastProduct, ImagePath ) VALUES (@ProductName, @SupplierID, @CategoryID, @QuantityPerUnit, @UnitPrice, @UnitsInStock, @UnitsOnOrder, @ReorderLevel, @Discontinued, @Barcode, @IsFastProduct, @ImagePath)";
                 cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@pName", p.productName);
-                cmd.Parameters.AddWithValue("@sID", p.supplierID);
-                cmd.Parameters.AddWithValue("@cID", p.categoryID);
-                cmd.Parameters.AddWithValue("@qpUnit", p.quantityPerUnit);
-                cmd.Parameters.AddWithValue("@uPrice", p.unitPrice);
-                cmd.Parameters.AddWithValue("@uiStock", p.unitInStock);
-                cmd.Parameters.AddWithValue("@uoOrder", p.unitsOnOrder);
-                cmd.Parameters.AddWithValue("@rLevel", p.reorderLevel);
+                cmd.Parameters.AddWithValue("@ProductName", p.productName);
+                cmd.Parameters.AddWithValue("@SupplierID", p.supplierID);
+                cmd.Parameters.AddWithValue("@CategoryID", p.categoryID);
+                cmd.Parameters.AddWithValue("@QuantityPerUnit", p.quantityPerUnit);
+                cmd.Parameters.AddWithValue("@UnitPrice", p.unitPrice);
+                cmd.Parameters.AddWithValue("@UnitsInStock", p.unitInStock);
+                cmd.Parameters.AddWithValue("@UnitsOnOrder", p.unitsOnOrder);
+                cmd.Parameters.AddWithValue("@ReorderLevel", p.reorderLevel);
+                cmd.Parameters.AddWithValue("@Discontinued", p.discontinued);
+                cmd.Parameters.AddWithValue("@Barcode", p.barcode);
+                cmd.Parameters.AddWithValue("@IsFastProduct", p.isFastProduct);
+                cmd.Parameters.AddWithValue("@ImagePath", p.imagePath);
                 con.Open();
                 cmd.ExecuteNonQuery();
+                return true;
             }
+            catch { return false; }
             finally { con.Close(); }
+        }
+        public Products GetProduct(int id)
+        {
+
+            try
+            {
+                cmd.CommandText = "SELECT p.ProductID, p.ProductName,p.SupplierID, s.CompanyName,p.CategoryID, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel, p.Discontinued, p.ImagePath, p.Barcode FROM Products AS p JOIN Categories AS c ON c.CategoryID = p.CategoryID JOIN Suppliers AS s ON s.SupplierID = p.SupplierID WHERE p.ProductID=@id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                Products model = new Products();
+                while (reader.Read())
+                {
+                    model.ID = reader.GetInt32(0);
+                    model.productName = reader.GetString(1);
+                    model.supplierID = reader.GetInt32(2);
+                    model.supplierName = reader.GetString(3);
+                    model.categoryID = reader.GetInt32(4);
+                    model.categoryName = reader.GetString(5);
+                    model.quantityPerUnit = !reader.IsDBNull(6) ? reader.GetString(6) : "";
+                    model.unitPrice = reader.GetDecimal(7);
+                    model.unitInStock = reader.GetInt16(8);
+                    model.unitsOnOrder = reader.GetInt16(9);
+                    model.reorderLevel = reader.GetInt16(10);
+                    model.discontinued = reader.GetBoolean(11);
+                    model.imagePath = !reader.IsDBNull(12) ? reader.GetString(12) : "product.png";
+                    model.barcode = reader.IsDBNull(13) ? "" : reader.GetString(13);
+                }
+                return model;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                con.Close();
+            }
         }
         #endregion
 
@@ -392,7 +463,43 @@ namespace DataAccessLayer
         #endregion
 
         #region Suppliers Operations
-
+        public List<Suppliers> SupplierList()
+        {
+            List<Suppliers> suppliers = new List<Suppliers>();
+            try
+            {
+                cmd.CommandText = "SELECT [SupplierID],[CompanyName] ,[ContactName],[ContactTitle],[Address],[City],[Region],[PostalCode],[Country],[Phone],[Fax],[HomePage] FROM Suppliers";
+                cmd.Parameters.Clear();
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Suppliers model = new Suppliers();
+                    model.ID = reader.GetInt32(0);
+                    model.companyName = reader.GetString(1);
+                    model.contactName = !reader.IsDBNull(2) ? reader.GetString(2) : "";
+                    model.contactTitle = !reader.IsDBNull(3) ? reader.GetString(3) : "";
+                    model.address = !reader.IsDBNull(4) ? reader.GetString(4) : "";
+                    model.city = !reader.IsDBNull(5) ? reader.GetString(5) : "";
+                    model.region = !reader.IsDBNull(6) ? reader.GetString(6) : "";
+                    model.postalCode = !reader.IsDBNull(7) ? reader.GetString(7) : "";
+                    model.country = !reader.IsDBNull(8) ? reader.GetString(8) : "";
+                    model.phone = !reader.IsDBNull(9) ? reader.GetString(9) : "";
+                    model.fax = !reader.IsDBNull(10) ? reader.GetString(10) : "";
+                    model.homePage = !reader.IsDBNull(11) ? reader.GetString(11) : "";
+                    suppliers.Add(model);
+                }
+                return suppliers;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
         #endregion
 
 

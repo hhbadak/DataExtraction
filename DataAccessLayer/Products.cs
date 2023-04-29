@@ -10,6 +10,7 @@ namespace DataAccessLayer
     {
         public int ID { get; set; }
         public string productName { get; set; }
+        public string barcode { get; set; }
         public int supplierID { get; set; }
         public string supplierName { get; set; }
         public int categoryID { get; set; }
@@ -20,5 +21,7 @@ namespace DataAccessLayer
         public Int16 unitsOnOrder { get; set; }
         public Int16 reorderLevel { get; set; }
         public bool discontinued { get; set; }
+        public string imagePath { get; set; }
+        public bool isFastProduct { get; set; }
     }
 }
