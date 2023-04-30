@@ -16,6 +16,7 @@ namespace DataExtraction
     {
         DataModel dm = new DataModel();
         int index;
+        int id = -1;
         public ProductsShow()
         {
             InitializeComponent();
@@ -28,7 +29,7 @@ namespace DataExtraction
             dgv_productList.DataSource = dm.productList();
             GridDoldur();
 
-            cb_category.ValueMember = "CategoryID";
+            cb_category.ValueMember = "ID";
             cb_category.DisplayMember = "CategoryName";
             cb_category.DataSource = dm.GetCategories();
 
@@ -58,7 +59,7 @@ namespace DataExtraction
                 r["Tedarikçi"] = prod[i].supplierName;
                 r["Stok"] = prod[i].unitInStock;
                 r["Fiyat"] = prod[i].unitPrice;
-                r["Satış Durum"] = prod[i].discontinued ? "Satışta Değil " : "Satışta" ;
+                r["Satış Durum"] = prod[i].discontinued ? "Satışta Değil " : "Satışta";
                 dt.Rows.Add(r);
             }
             dgv_productList.DataSource = dt;
@@ -93,11 +94,11 @@ namespace DataExtraction
 
             if (dm.productAdd(model))
             {
-                MessageBox.Show("Kayıt Başarılı","Başarılı");
+                MessageBox.Show("Kayıt Başarılı", "Başarılı");
             }
             else
             {
-                MessageBox.Show("Kayıt Başarısız","Başarısız");
+                MessageBox.Show("Kayıt Başarısız", "Başarısız");
             }
             GridDoldur();
         }
@@ -112,7 +113,7 @@ namespace DataExtraction
 
         private void dgv_productList_MouseDown(object sender, MouseEventArgs e)
         {
-            index = dgv_productList.HitTest(e.X,e.Y).RowIndex;
+            index = dgv_productList.HitTest(e.X, e.Y).RowIndex;
             if (index != -1)
             {
                 if (e.Button == MouseButtons.Right)
@@ -148,7 +149,19 @@ namespace DataExtraction
 
         private void TSMI_delete_Click(object sender, EventArgs e)
         {
-           
+            int id = Convert.ToInt32(dgv_productList.Rows[index].Cells["ID"].Value);
+            if (id != -1)
+            {
+                if (MessageBox.Show($"{id} ID'li Kategori SİLİNECEK, Emin misiniz?", "Sil", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    dm.productDelete(id);
+                }
+                else
+                {
+                    MessageBox.Show("Silme İşlemi İptal Edildi", "İPTAL");
+                }
+            }
+            GridDoldur();
         }
     }
 }

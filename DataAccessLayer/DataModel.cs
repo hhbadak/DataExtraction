@@ -363,28 +363,36 @@ namespace DataAccessLayer
         #region Product Operations
         public List<Products> productList()
         {
-            List<Products> productList = new List<Products>();
+            List<Products> products = new List<Products>();
             try
             {
-                cmd.CommandText = "SELECT p.ProductID, p.ProductName, s.CompanyName, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel FROM Products AS p\r\nJOIN Categories AS c ON c.CategoryID = p.CategoryID\r\nJOIN Suppliers AS s ON s.SupplierID = p.SupplierID";
+                cmd.CommandText = "SELECT p.ProductID, p.ProductName,p.SupplierID, s.CompanyName,p.CategoryID, c.CategoryName, p.QuantityPerUnit, p.UnitPrice, p.UnitsInStock, p.UnitsOnOrder, p.ReorderLevel, p.Discontinued, p.ImagePath, p.Barcode FROM Products AS p JOIN Categories AS c ON c.CategoryID = p.CategoryID JOIN Suppliers AS s ON s.SupplierID = p.SupplierID";
                 cmd.Parameters.Clear();
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
+
                 while (reader.Read())
                 {
-                    Products p = new Products();
-                    p.ID = reader.GetInt32(0);
-                    p.productName = reader.GetString(1);
-                    p.supplierName = reader.GetString(2);
-                    p.categoryName = reader.GetString(3);
-                    p.quantityPerUnit = reader.GetString(4);
-                    p.unitPrice = reader.GetDecimal(5);
-                    p.unitInStock = reader.GetInt16(6);
-                    p.unitsOnOrder = reader.GetInt16(7);
-                    p.reorderLevel = reader.GetInt16(8);
-                    productList.Add(p);
+                    Products model = new Products()
+                    {
+                        ID = reader.GetInt32(0),
+                        productName = reader.GetString(1),
+                        supplierID = reader.GetInt32(2),
+                        supplierName = reader.GetString(3),
+                        categoryID = reader.GetInt32(4),
+                        categoryName = reader.GetString(5),
+                        quantityPerUnit = !reader.IsDBNull(6) ? reader.GetString(6) : "",
+                        unitPrice = reader.GetDecimal(7),
+                        unitInStock = reader.GetInt16(8),
+                        unitsOnOrder = reader.GetInt16(9),
+                        reorderLevel = reader.GetInt16(10),
+                        discontinued = reader.GetBoolean(11),
+                        imagePath = !reader.IsDBNull(12) ? reader.GetString(12) : "product.png",
+                        barcode = reader.IsDBNull(13) ? "" : reader.GetString(13)
+                    };
+                    products.Add(model);
                 }
-                return productList;
+                return products;
             }
             catch
             {
@@ -455,6 +463,18 @@ namespace DataAccessLayer
             {
                 con.Close();
             }
+        }
+        public void productDelete(int id)
+        {
+            try
+            {
+                cmd.CommandText = "DELETE FROM Products WHERE ProductID = @id";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            finally { con.Close(); }
         }
         #endregion
 
